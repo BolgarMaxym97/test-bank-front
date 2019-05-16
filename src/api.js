@@ -10,6 +10,7 @@ const ENDPOINTS = {
     LOGIN: "login",
     REGISTER: "register",
     CARDS: "cards",
+    OPERATIONS: "operations",
 };
 
 let api = axios.create({

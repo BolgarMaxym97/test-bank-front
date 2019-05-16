@@ -22,7 +22,8 @@
     import {mapGetters} from "vuex";
     import _ from "lodash";
     import NewCreditCard from "@/modals/NewCreditCard";
-    import Cards from "@/components/Cards/Card";
+    import Cards from "@/components/Cards/Cards";
+    import EventBus from "@/event-bus";
 
     export default {
         data() {
@@ -34,11 +35,10 @@
         },
 
         mounted() {
-            this.$http.get(ENDPOINTS.CARDS + "/" + _.get(this.userData, "id"))
-                .then(resp => {
-                    this.cards = resp.cards;
-                    this.loading = false;
-                });
+            this.fetch();
+            EventBus.$on("cards-fetch",() => {
+                this.fetch();
+            });
         },
 
         methods: {
@@ -55,6 +55,14 @@
                 if (index !== -1) {
                     this.cards.splice(index, 1);
                 }
+            },
+
+            fetch() {
+                this.$http.get(ENDPOINTS.CARDS + "/" + _.get(this.userData, "id"))
+                    .then(resp => {
+                        this.cards = resp.cards;
+                        this.loading = false;
+                    });
             }
         },
 

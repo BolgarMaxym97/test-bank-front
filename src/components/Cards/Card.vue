@@ -1,42 +1,54 @@
 <template>
-    <b-row v-if="cards.length">
-        <b-col :key="card.number" xl="3" lg="4" md="6" sm="6" class="mt-3" v-for="card in cards">
-            <b-card class="text-center m-auto card-item">
-                <div class="bank-name float-left">BankName</div>
-                <b-button size="sm" variant="danger" class="float-right" v-b-tooltip.hover
-                          @click="onDelete(card.id)"
-                          title="Remove credit card">
-                    <font-awesome-icon icon="trash"/>
-                </b-button>
-                <br>
-                <div class="card-number">{{cc_format(card.number)}}</div>
-                <div class="user-name float-left">{{userData.full_name}}</div>
-                <div class="expired_at floar-right">{{card.expired_at}}</div>
-            </b-card>
-        </b-col>
+    <b-card class="text-center m-auto card-item">
+        <div class="bank-name float-left">BankName</div>
+        <b-button size="sm" variant="danger" class="float-right" v-b-tooltip.hover
+                  @click="confirmShow = true"
+                  title="Remove credit card">
+            <font-awesome-icon icon="trash"/>
+        </b-button>
+        <br>
+        <div class="card-number">{{cc_format(card.number)}}</div>
+        <div class="user-name float-left">{{userData.full_name}}</div>
+        <div class="expired_at float-right">{{card.expired_at}}</div>
+
+        <div class="mt-5">
+            <b-button size="sm" variant="primary" class="float-left" v-b-tooltip.hover
+                      @click="true"
+                      title="Info about card and operations">
+                <font-awesome-icon icon="info"/>
+            </b-button>
+
+            <b-button size="sm" variant="success" class="float-right" v-b-tooltip.hover
+                      @click="operationModalShow = true"
+                      title="Make operation">
+                <font-awesome-icon icon="money-bill"/>
+            </b-button>
+        </div>
+        <operations-modal :card="card" @hidden="operationModalShow = false" v-if="operationModalShow"></operations-modal>
         <confirm-modal @hidden="confirmShow = false" @onOk="removeCard"
                        :text="`Are you sure that you want remove this card?`" v-if="confirmShow"/>
-    </b-row>
+    </b-card>
 </template>
 
 <script>
     import mixins from "@/mixins";
     import {mapGetters} from "vuex";
-    import ConfirmModal from "@/modals/ConfirmModal";
     import {ENDPOINTS} from "@/api";
+    import OperationsModal from "@/modals/OperationsModal";
+    import ConfirmModal from "@/modals/ConfirmModal";
 
     export default {
         mixins: [mixins],
         props: {
-            cards: {
-                type: Array,
+            card: {
+                type: Object,
                 required: true
             }
         },
         data() {
             return {
+                operationModalShow: false,
                 confirmShow: false,
-                selectedCardId: null
             };
         },
         computed: {
@@ -45,23 +57,20 @@
             ])
         },
         methods: {
-            onDelete(cardId) {
-                this.confirmShow = true;
-                this.selectedCardId = cardId;
-            },
             removeCard(ev) {
                 ev.preventDefault();
-                this.$http.delete(ENDPOINTS.CARDS + "/" + this.selectedCardId)
+                this.$http.delete(ENDPOINTS.CARDS + "/" + this.card.id)
                     .then(resp => {
                         if (resp.success) {
                             this.confirmShow = false;
-                            this.$emit("on-delete", this.selectedCardId);
+                            this.$emit("on-delete", this.card.id);
                             this.$toastr("success", "Successfully deleted");
                         }
                     });
             },
         },
         components: {
+            OperationsModal,
             ConfirmModal,
         }
     };
