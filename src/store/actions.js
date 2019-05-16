@@ -25,7 +25,7 @@ export default {
                 });
         });
     },
-    register(data) {
+    register({commit}, data) {
         return new Promise((resolve, reject) => {
             Vue.prototype.$http.post("register", data)
                 .then(resp => {

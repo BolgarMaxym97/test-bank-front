@@ -2,48 +2,39 @@
     <div class="login">
         <b-card
                 class="text-center auth-card"
-                header="Smart Plants Admin Dashboard"
+                header="Test Bank Application"
                 header-bg-variant="dark"
                 header-text-variant="white"
-                title="Sign In"
+                :title="isLogin ? 'Sign In' : 'Sign Up'"
                 align="center">
-            <b-form class="login" @submit.prevent="login">
-                <b-form-group id="emailInputGroup"
-                              label="Email address:"
-                              label-for="email">
-                    <b-form-input id="email"
-                                  type="email"
-                                  v-model="email"
-                                  required
-                                  placeholder="Enter email">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="passwordInputGroup"
-                              label="Password:"
-                              label-for="password">
-                    <b-form-input id="password"
-                                  type="password"
-                                  v-model="password"
-                                  required
-                                  placeholder="Enter password">
-                    </b-form-input>
-                </b-form-group>
-                <b-button align="center" class="auth-btn" type="submit" variant="primary">
-                    <font-awesome-icon icon="sign-in-alt"/>
-                    Login
+            <div class="login" v-if="isLogin">
+                <login-form/>
+                <b-button class="auth-btn float-left" type="button" variant="dark" @click="isLogin = false">
+                    To registration
                 </b-button>
-            </b-form>
+            </div>
+            <div class="register" v-else>
+                <register-form @is-login="isLogin = true"/>
+                <b-button class="auth-btn float-left" type="button" variant="dark" @click="isLogin = true">
+                    To login
+                </b-button>
+            </div>
         </b-card>
     </div>
 </template>
 
 <script>
 
+    import LoginForm from "@/components/Login/LoginForm";
+    import RegisterForm from "@/components/Login/RegisterForm";
+
     export default {
         data() {
             return {
                 email: "",
                 password: "",
+                isLogin: true,
+                newUserData: {}
             };
         },
         methods: {
@@ -52,7 +43,17 @@
                 let password = this.password;
                 this.$store.dispatch("login", {email, password})
                     .then(() => this.$router.push("/"));
+            },
+            register: function () {
+                this.$store.dispatch("register", this.newUserData)
+                    .then(() => {
+                        this.isLogin = true;
+                    });
             }
+        },
+        components: {
+            LoginForm,
+            RegisterForm
         }
     };
 </script>
@@ -60,8 +61,7 @@
 <style scoped>
     .auth-card {
         max-width: 30%;
-        left: 50%;
-        transform: translate(-50%, 60%);
+        margin: 0 auto;
     }
 
     .auth-btn {

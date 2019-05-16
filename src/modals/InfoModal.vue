@@ -7,7 +7,7 @@
              ok-variant="success"
              @hidden="onHidden">
         <h2 class="float-left">Current balance: {{card.amount}}</h2>
-        <table class="table" v-if="card.operations.length">
+        <table class="table mt-4" v-if="card.operations && card.operations.length">
             <thead>
             <tr>
                 <th scope="col">Type</th>
@@ -27,7 +27,7 @@
             </tr>
             </tbody>
         </table>
-        <div class="" v-else>There is no operations yet</div>
+        <div class="mt-5" v-else>There is no operations yet</div>
     </b-modal>
 </template>
 
