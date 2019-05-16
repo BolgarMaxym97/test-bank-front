@@ -9,17 +9,9 @@
                 Add
             </b-button>
             <new-credit-card @card-added="afterCardAdded" v-if="createCard" @hidden="createCard = false"/>
-            <b-row v-if="cards.length">
-                <b-col :key="card.number" xl="3" lg="3" md="3" class="mt-3" v-for="card in cards">
-                    <b-card class="text-center m-auto card-item">
-                        <div class="bank-name float-left">BankName</div>
-                        <br>
-                        <div class="card-number">{{cc_format(card.number)}}</div>
-                        <div class="user-name float-left">{{userData.full_name}}</div>
-                        <div class="expired_at floar-right">{{card.expired_at}}</div>
-                    </b-card>
-                </b-col>
-            </b-row>
+            <div v-if="cards.length">
+                <cards :cards="cards" @on-delete="afterCardRemoving"/>
+            </div>
             <div v-else class="">There is no cards</div>
         </div>
     </div>
@@ -30,10 +22,9 @@
     import {mapGetters} from "vuex";
     import _ from "lodash";
     import NewCreditCard from "@/modals/NewCreditCard";
-    import mixins from "@/mixins";
+    import Cards from "@/components/Cards/Card";
 
     export default {
-        mixins: [mixins],
         data() {
             return {
                 loading: true,
@@ -56,10 +47,20 @@
                     this.cards.push(payload);
                 }
             },
+
+            afterCardRemoving(cardId) {
+                const index = this.cards.findIndex(card => {
+                    return card.id === cardId;
+                });
+                if (index !== -1) {
+                    this.cards.splice(index, 1);
+                }
+            }
         },
 
         components: {
-            NewCreditCard
+            NewCreditCard,
+            Cards
         },
 
         computed: {
@@ -75,16 +76,6 @@
 
     .dashboard {
         padding: 2%;
-
-        .card-item {
-            width: 100%;
-            height: 220px;
-
-            .card-number {
-                margin-top: 50px;
-                margin-bottom: 10px;
-            }
-        }
     }
 
     .loader {

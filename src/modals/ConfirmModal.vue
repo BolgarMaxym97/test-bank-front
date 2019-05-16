@@ -3,14 +3,13 @@
              :title="title"
              v-b-modal.modalsm
              ref="modal"
-             ok-title="Да"
-             cancel-title="Нет"
+             ok-title="Yes"
+             cancel-title="No"
              ok-variant="success"
              :cancel-disabled="loading"
              :ok-disabled="loading"
              @hidden="onHidden"
              @ok="ok">
-        <font-awesome-icon v-if="loading" icon="spinner" class="loader"/>
         <span v-html="text"></span>
     </b-modal>
 </template>
