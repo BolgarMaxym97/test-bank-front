@@ -35,9 +35,9 @@
         },
 
         mounted() {
-            this.fetch();
-            EventBus.$on("cards-fetch", () => {
-                this.fetch();
+            this.fetch(this.userData.id);
+            EventBus.$on("cards-fetch", (user_id) => {
+                this.fetch(user_id);
             });
         },
 
@@ -57,8 +57,8 @@
                 }
             },
 
-            fetch() {
-                this.$http.get(ENDPOINTS.CARDS + "/" + _.get(this.userData, "id"))
+            fetch(user_id) {
+                this.$http.get(ENDPOINTS.CARDS + "/" + user_id)
                     .then(resp => {
                         this.cards = resp.cards;
                         this.loading = false;

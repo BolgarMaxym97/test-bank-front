@@ -106,7 +106,7 @@
                 this.$http.post(ENDPOINTS.OPERATIONS, this.operationData).then(resp => {
                     this.loading = false;
                     if (_.get(resp, "success")) {
-                        EventBus.$emit("cards-fetch");
+                        EventBus.$emit("cards-fetch", this.card.user_id);
                         this.$refs.modal.hide();
                     } else {
                         Vue.prototype.$toastr("error", "Error", "Wrong data or not enough money");
