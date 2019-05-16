@@ -36,7 +36,7 @@
 
         mounted() {
             this.fetch();
-            EventBus.$on("cards-fetch",() => {
+            EventBus.$on("cards-fetch", () => {
                 this.fetch();
             });
         },

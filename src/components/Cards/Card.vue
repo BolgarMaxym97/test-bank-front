@@ -13,7 +13,7 @@
 
         <div class="mt-5">
             <b-button size="sm" variant="primary" class="float-left" v-b-tooltip.hover
-                      @click="true"
+                      @click="infoModalShow = true"
                       title="Info about card and operations">
                 <font-awesome-icon icon="info"/>
             </b-button>
@@ -24,9 +24,12 @@
                 <font-awesome-icon icon="money-bill"/>
             </b-button>
         </div>
-        <operations-modal :card="card" @hidden="operationModalShow = false" v-if="operationModalShow"></operations-modal>
+        <operations-modal :card="card" @hidden="operationModalShow = false"
+                          v-if="operationModalShow"></operations-modal>
+        <info-modal :card="card" @hidden="infoModalShow = false"
+                    v-if="infoModalShow"></info-modal>
         <confirm-modal @hidden="confirmShow = false" @onOk="removeCard"
-                       :text="`Are you sure that you want remove this card?`" v-if="confirmShow"/>
+                       :text="`Aconfirm-modal @h you want remove this card?`" v-if="confirmShow"/>
     </b-card>
 </template>
 
@@ -35,6 +38,7 @@
     import {mapGetters} from "vuex";
     import {ENDPOINTS} from "@/api";
     import OperationsModal from "@/modals/OperationsModal";
+    import InfoModal from "@/modals/InfoModal";
     import ConfirmModal from "@/modals/ConfirmModal";
 
     export default {
@@ -47,6 +51,7 @@
         },
         data() {
             return {
+                infoModalShow: false,
                 operationModalShow: false,
                 confirmShow: false,
             };
@@ -72,6 +77,7 @@
         components: {
             OperationsModal,
             ConfirmModal,
+            InfoModal,
         }
     };
 </script>

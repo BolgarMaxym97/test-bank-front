@@ -13,7 +13,8 @@
         <b-row>
             <b-col xl="12" lg="12" md="12">
                 <label for="operation_type_id" class="float-left">Select operation type</label>
-                <b-form-select v-model="operationData.operation_type_id" :options="types" id="operation_type_id"></b-form-select>
+                <b-form-select v-model="operationData.operation_type_id" :options="types"
+                               id="operation_type_id"></b-form-select>
 
                 <b-form-group
                         v-if="operationData.operation_type_id === 3"
