@@ -10,9 +10,13 @@
             </b-button>
             <new-credit-card @card-added="afterCardAdded" v-if="createCard" @hidden="createCard = false"/>
             <b-row v-if="cards.length">
-                <b-col :key="card.number" xl="3" lg="3" md="3" v-for="card in cards">
+                <b-col :key="card.number" xl="3" lg="3" md="3" class="mt-3" v-for="card in cards">
                     <b-card class="text-center m-auto card-item">
-                        test
+                        <div class="bank-name float-left">BankName</div>
+                        <br>
+                        <div class="card-number">{{cc_format(card.number)}}</div>
+                        <div class="user-name float-left">{{userData.full_name}}</div>
+                        <div class="expired_at floar-right">{{card.expired_at}}</div>
                     </b-card>
                 </b-col>
             </b-row>
@@ -26,8 +30,10 @@
     import {mapGetters} from "vuex";
     import _ from "lodash";
     import NewCreditCard from "@/modals/NewCreditCard";
+    import mixins from "@/mixins";
 
     export default {
+        mixins: [mixins],
         data() {
             return {
                 loading: true,
@@ -73,6 +79,11 @@
         .card-item {
             width: 100%;
             height: 220px;
+
+            .card-number {
+                margin-top: 50px;
+                margin-bottom: 10px;
+            }
         }
     }
 
